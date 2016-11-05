@@ -12,23 +12,19 @@ from product_category_self_referential_model import ProductCategoryModel as Cate
 
 
 class ProductCategoryModel(BasicModel):
-    class Meta:
-        label_name = {
-            "name": u"網址名稱",
-            "title": u"後台識別名稱",
-            "title_lang_zhtw": u"繁體分類標題",
-            "title_lang_zhcn": u"簡體分類標題",
-            "title_lang_enus": u"英文分類標題",
-            "category": u"父類別",
-            "is_enable": u"啟用",
-        }
-    name = Fields.StringProperty()
-    title = Fields.StringProperty()
-    title_lang_zhtw = Fields.StringProperty()
-    title_lang_zhcn = Fields.StringProperty()
-    title_lang_enus = Fields.StringProperty()
-    category = Fields.CategoryProperty(kind=Category)
-    is_enable = Fields.BooleanProperty(default=True)
+    name = Fields.StringProperty(verbose_name=u"網址名稱")
+    title = Fields.StringProperty(verbose_name=u"後台識別名稱")
+    title_lang_zhtw = Fields.StringProperty(verbose_name=u"繁體分類標題")
+    title_lang_zhcn = Fields.StringProperty(verbose_name=u"簡體分類標題")
+    title_lang_enus = Fields.StringProperty(verbose_name=u"英文分類標題")
+    category = Fields.CategoryProperty(kind=Category, verbose_name=u"父類別")
+    category_1 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 1")
+    category_2 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 2")
+    category_3 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 3")
+    category_4 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 4")
+    category_5 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 5")
+    category_6 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 6")
+    is_enable = Fields.BooleanProperty(default=True, verbose_name=u"啟用")
 
     @classmethod
     def all_enable(cls, category=None, *args, **kwargs):
