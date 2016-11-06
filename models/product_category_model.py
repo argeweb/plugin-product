@@ -18,6 +18,8 @@ class ProductCategoryModel(BasicModel):
     title_lang_zhcn = Fields.StringProperty(verbose_name=u"簡體分類標題")
     title_lang_enus = Fields.StringProperty(verbose_name=u"英文分類標題")
     category = Fields.CategoryProperty(kind=Category, verbose_name=u"父類別")
+    must_update_product = Fields.BooleanProperty(default=False, verbose_name=u"必須更新產品")
+    must_update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u"產品更新時間")
     category_1 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 1")
     category_2 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 2")
     category_3 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 3")

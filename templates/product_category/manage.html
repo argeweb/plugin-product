@@ -31,7 +31,9 @@
             {%- set list = context[scaffolding.plural] -%}
             <ul id="product_category_list" style="display: none;">
                 {% for item in list %}
-                <li data-key="{{ print_key(item) }}" data-parent="{% if item.category %}{{ print_key(item.category) }}{% endif %}">{{ item.title }}</li>
+                <li data-key="{{ print_key(item) }}"
+                    data-sort="{{ item.sort }}"
+                    data-parent="{% if item.category %}{{ print_key(item.category) }}{% endif %}">{{ item.title }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -50,10 +52,10 @@
                 <div class="ibox-content update-list">
                     <h6>需更新的項目</h6>
                     <ul class="todo-list small-list ui-sortable" id="sendInfo">
-                        <li>需要更新類別目錄 <span id="sendP1">--</span> 個項目 (較耗時)</li>
-                        <li>需要更新類別位置 <span id="sendP2">--</span> 個項目</li>
+                        <li>需要更新類別目錄 <span id="sendP1">0 / 0</span> 個項目</li>
+                        <li>需要更新類別位置 <span id="sendP2">0 / 0</span> 個項目</li>
                     </ul>
-                    <h6 style="display: none;">詳細情形</h6>
+                    <h6 style="display: none;" class="detail">詳細情形</h6>
                     <ul class="todo-list m-t small-list ui-sortable" id="list1"></ul>
                     <ul class="todo-list small-list ui-sortable" id="list2"></ul>
                     <ul class="todo-list small-list ui-sortable" id="list3"></ul>
@@ -84,10 +86,18 @@
         }
         return d;
     };
-    page.insertCategory = function(category_id, category_name, parent_category_id){
-        var insert_item = '<li id="' + category_id +'"><div><i class="material-icons float-right mg-top-s-3 clickable">edit</i>'  + category_name + '</div></li>';
+    page.insertCategory = function(category_id, category_name, category_sort, parent_category_id){
+        var insert_item = '<li id="' + category_id +'" data-sort="' + category_sort + '"><div>'  + category_name + '</div></li>';
         if (typeof parent_category_id === "undefined" || parent_category_id == ""){
-            $(page.treeId).append(insert_item);
+            $(page.treeId +">li").each(function(){
+                if (category_sort > parseFloat($(this).data("sort"))){
+                    $(insert_item).insertBefore($(this));
+                    insert_item = "";
+                }
+            });
+            if (insert_item != ""){
+                $(page.treeId).append(insert_item);
+            }
         }else{
             var pid = "#" + parent_category_id;
             var p = page.countParentLevel($(pid));
@@ -95,7 +105,15 @@
                 if ($(pid +">ul").length == 0){
                     $(pid).append("<ul></ul>");
                 }
-                $("#" + parent_category_id +">ul").prepend(insert_item);
+                $("#" + parent_category_id +">ul>li").each(function(){
+                    if (category_sort > parseFloat($(this).data("sort"))){
+                        $(insert_item).insertBefore($(this));
+                        insert_item = "";
+                    }
+                });
+                if (insert_item != ""){
+                    $("#" + parent_category_id +">ul").append(insert_item);
+                }
             }else{
                 console.log("error maxLeve <  " + p.toString());
             }
@@ -115,12 +133,14 @@
             item1["depth"] = page.countChildrenLevel($("#" + item1["id"]));
             var level_index = item1["level"] - 2;
             $.map(page.initList, function(item2){
+                item1["order_before"] = undefined;
                 if (item1["id"] == item2["id"]){
-                    item1["compare"] =page.compareItem(item1, item2);
+                    item1["compare"] = page.compareItem(item1, item2);
                     if (item1["compare"] >=2){
                         if (item1["order"] > 0){
                             if (typeof lastItemList[level_index] !== "undefined"){
                                 item1["order_after"] = lastItemList[level_index]["id"];
+                                lastItemList[level_index]["order_before"] = item1["id"];
                             }
                         }else{
                             item1["order_after"] = "now";
@@ -128,8 +148,10 @@
                     }
                     if (item1["compare"] > 0){
                         changeList.push(item1);
+                    }
+                    if (item1["compare"] == 1 || item1["compare"] == 3) {
                         $('#' + item1["id"]).find("ul li").each(function(){
-                            subCategoryIdList.push($(this).attr("id"));
+                            subCategoryIdList.push({"target": $(this).attr("id"), "parent": $(this).attr("id")});
                         });
                     }
                 }
@@ -146,8 +168,44 @@
         $(".m-l-xs .material-icons").eq(index).text("check_box");
     };
     page.saveChangeList = function(){
-        console.log(page.mustChangeParentList);
-        console.log(page.mustChangePositionList);
+        $(".update-button").prop("disabled", true);
+        var i = 0, is_move = false, is_sort = false;
+        var updateTarget = null, item = null;
+        if (typeof page.mustChangeParentList !== "undefined"){
+            for (;i<page.mustChangeParentList.length;i++){
+                item = page.mustChangeParentList[i];
+                if (typeof item["update"] === "undefined"){
+                    updateTarget = item;
+                    is_move = true;
+                    break;
+                }
+            }
+        }
+        if (updateTarget == null && typeof page.mustChangePositionList !== "undefined"){
+            for (i=0;i<page.mustChangePositionList.length;i++){
+                item = page.mustChangePositionList[i];
+                if (typeof item["update"] === "undefined"){
+                    updateTarget = item;
+                    is_sort = true;
+                    break;
+                }
+            }
+        }
+        if (updateTarget != null){
+            var path = is_move ? "change_parent" : "change_sort";
+            var sendP = is_move ? "#sendP1" : "#sendP2";
+            var length = is_move ? page.mustChangeParentList.length : page.mustChangePositionList.length;
+            json("/admin/product_category/" + path, updateTarget, function(data){
+                updateTarget["update"] = Date.now();
+                $(sendP).text((i+1) + " / " + length);
+                setTimeout(page.saveChangeList, 80);
+            })
+        }else{
+            page.initList = $(page.treeId).sortableListsToArray();
+            page.compare();
+            $(".update-button").prop("disabled", false);
+            backend.message.quick_show("更新完成", 1800);
+        }
     };
     page.compare = function(){
         var currentList = $(page.treeId).sortableListsToArray(), cl = page.getChangeList(currentList);
@@ -160,7 +218,7 @@
             if (compare > 1){
                 order = ", 排在" + $('*[data-key="' + item["order_after"] + '"]').text() + "後";
                 if (item["order"] == 0){ order = ", 排在該分類的最上方"}
-                page.mustChangePositionList.push({"target": id, "sort": item["order_after"]});
+                page.mustChangePositionList.push({"target": id, "sort": item["order_after"], "sort_before": item["order_before"]});
             }
             if (compare == 1 || compare == 3) {
                 pos = ", 移動到" + ((typeof pid === "undefined") ? "根目錄" : $('*[data-key="' + pid + '"]').text()) + "下";
@@ -172,29 +230,24 @@
         });
         $.map(subCategoryIdList, function(item){
             $("#list4").append(
-                '<li><span class="m-l-xs">' + $('*[data-key="' + item + '"]').text() + ' 需要重整父類別 </span></li>'
+                '<li><span class="m-l-xs">' + $('*[data-key="' + item["target"] + '"]').text() + ' 需要重整父類別 </span></li>'
             );
-            page.mustChangeParentList.push({"target": item, "parent": item});
+            page.mustChangeParentList.push(item);
         });
-        page.mustChangeParentList = $.unique(page.mustChangeParentList);
-        page.mustChangePositionList = $.unique(page.mustChangePositionList);
         $("#sendP1").text("0 / " + page.mustChangeParentList.length);
         $("#sendP2").text("0 / " + page.mustChangePositionList.length);
-        $(".update-list h6").hide();
-        if ($(".update-list li").length > $("#sendInfo li").length){
-            $(".update-list h6").show();
-        }
+        $(".update-list h6.detail").toggle(($(".update-list li").length > $("#sendInfo li").length));
     };
     page.init = function(){
         var next_list = [];
         $("#product_category_list li").each(function(){
-            next_list.push({"key": $(this).data("key"), "text": $(this).text(), "parent": $(this).data("parent")});
+            next_list.push({"key": $(this).data("key"), "text": $(this).text(), "sort": parseFloat($(this).data("sort")), "parent": $(this).data("parent")});
         });
         for (var i=0;i<5;i++){
             var next_list_temp = [];
             for (var j = 0, l = next_list.length; j < l; j++ ) {
                 var item = next_list[j];
-                if (page.insertCategory(item["key"], item["text"], item["parent"]) == false){
+                if (page.insertCategory(item["key"], item["text"], item["sort"], item["parent"]) == false){
                     next_list_temp.push(item);
                 }
             }
