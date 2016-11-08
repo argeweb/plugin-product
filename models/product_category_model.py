@@ -19,13 +19,8 @@ class ProductCategoryModel(BasicModel):
     title_lang_enus = Fields.StringProperty(verbose_name=u"英文分類標題")
     category = Fields.CategoryProperty(kind=Category, verbose_name=u"父類別")
     must_update_product = Fields.BooleanProperty(default=False, verbose_name=u"必須更新產品")
-    must_update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u"產品更新時間")
-    category_1 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 1")
-    category_2 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 2")
-    category_3 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 3")
-    category_4 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 4")
-    category_5 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 5")
-    category_6 = Fields.CategoryProperty(kind=Category, verbose_name=u"類別 6")
+    update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u"產品更新時間")
+    update_cursor = Fields.StringProperty(default=u"", verbose_name=u"產品更新指針")
     is_enable = Fields.BooleanProperty(default=True, verbose_name=u"啟用")
 
     @classmethod
@@ -40,3 +35,8 @@ class ProductCategoryModel(BasicModel):
 
     def before_put(self):
         super(ProductCategoryModel, self).before_put()
+
+
+    @classmethod
+    def need_update_record(cls, *args, **kwargs):
+        return cls.query(cls.must_update_product == True).order(cls.update_timestamp).get()

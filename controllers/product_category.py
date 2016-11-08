@@ -6,6 +6,8 @@
 # Web: http://www.yooliang.com/
 # Date: 2015/7/12.
 
+from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 from argeweb import Controller, scaffold, route_menu, Fields, route_with, route
 from argeweb.components.pagination import Pagination
 from argeweb.components.search import Search
@@ -19,7 +21,9 @@ class ProductCategory(Controller):
         pagination_limit = 1000
 
     class Scaffold:
-        display_properties_in_list = ("name", "title", "is_enable", "category")
+        display_properties_in_list = ("name", "title", "title_lang_zhtw", "is_enable", "category")
+        hidden_properties_in_edit = ("must_update_product", "update_timestamp", "update_cursor")
+        excluded_properties_in_from = ()
 
     @route_menu(list_name=u"backend", text=u"產品分類", sort=102, group=u"產品")
     def admin_list(self):
@@ -88,4 +92,46 @@ class ProductCategory(Controller):
         self.meta.change_view("json")
         self.context["data"] = {
             "sort": "done"
+        }
+
+    @route
+    def corn_update_product(self):
+        self.meta.change_view("json")
+        self.context["data"] = {
+            "update": "start"
+        }
+        record = self.meta.Model.need_update_record()
+        if record is None:
+            self.context["data"] = {
+                "update": "done"
+            }
+            return
+        cursor = Cursor(urlsafe=record.update_cursor)
+        self.logging.info(record.update_cursor)
+        category = record.category
+        category_list = [record.key]
+        while category is not None:
+            category_list.insert(0, category)
+            category = category.get().category
+        c = category_list
+        for i in xrange(len(category_list), 6):
+            category_list.append(None)
+
+        from ..models.product_model import ProductModel
+        query = ProductModel.query(ProductModel.category == record.key)
+        data, next_cursor, more = query.fetch_page(500, start_cursor=cursor)
+
+        for item in data:
+            item.category_1 = category_list[0]
+            item.category_2 = category_list[1]
+            item.category_3 = category_list[2]
+            item.category_4 = category_list[3]
+            item.category_5 = category_list[4]
+            item.category_6 = category_list[5]
+        record.update_cursor = next_cursor.urlsafe() if more else None
+        record.must_update_product = more
+        record.put_async()
+        ndb.put_multi_async(data)
+        self.context["data"] = {
+            "update": record.name
         }
