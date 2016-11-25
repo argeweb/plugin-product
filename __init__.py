@@ -37,6 +37,7 @@ plugins_helper = {
                 {"action": "edit", "name": u"編輯產品分類"},
                 {"action": "view", "name": u"檢視產品分類"},
                 {"action": "delete", "name": u"刪除產品分類"},
+                {"action": "manage", "name": u"產品分類排列"},
             ]
         },
         "product_config": {

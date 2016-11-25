@@ -1,15 +1,15 @@
 {% import "backend/macros.html" as s with context %}
 {% import 'backend/form_macros.html' as f with context %}
 {% extends s.layout() %}
-
+{% block header %}{% endblock %}
 {% block layout_content %}
 <div class="ibox-content m-b-sm border-bottom">
     <div class="p-xs">
         <div class="pull-left m-r-md">
             <i class="fa fa-user text-navy mid-icon"></i>
         </div>
-        <h2>Firebase Authentication</h2>
-        <span>啟用或停用特定的登入方式。</span>
+        <h2>產品分類排列</h2>
+        <span>透過拖曳來變更分類的順序與其所屬的分類。</span>
         {% if last_record_date %}<span class="text-muted small pull-right visible-sm visible-md visible-lg">最後更新：<i class="fa fa-clock-o"></i> {{ print_value(last_record_date) }}</span>{% endif %}
     </div>
 </div>
@@ -24,7 +24,7 @@
     {% block form_tag %}
     <form method="POST"
           action="{{scaffolding.form_action|default(uri(_pass_all=True), True)}}"
-          class="form-horizontal"
+          class="form-horizontal row"
           enctype="{{scaffolding.form_encoding|default('application/x-www-form-urlencoded', True)}}"
           role="form" accept-charset="UTF-8"
           target="iframeForm">

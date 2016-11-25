@@ -25,12 +25,12 @@ class ProductCategory(Controller):
         hidden_properties_in_edit = ("must_update_product", "update_timestamp", "update_cursor")
         excluded_properties_in_from = ()
 
-    @route_menu(list_name=u"backend", text=u"產品分類", sort=102, group=u"產品")
+    @route_menu(list_name=u"backend", text=u"產品分類", sort=1102, group=u"產品維護")
     def admin_list(self):
         return scaffold.list(self)
 
     @route
-    @route_menu(list_name=u"backend", text=u"產品分類排列", sort=103, group=u"產品")
+    @route_menu(list_name=u"backend", text=u"產品分類排列", sort=1103, group=u"產品維護")
     def admin_manage(self):
         from ..models.product_config_model import ProductConfigModel
         self.context["config"] = ProductConfigModel.find_by_name(self.namespace)
