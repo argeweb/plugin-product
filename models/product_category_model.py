@@ -12,16 +12,16 @@ from product_category_self_referential_model import ProductCategoryModel as Cate
 
 
 class ProductCategoryModel(BasicModel):
-    name = Fields.StringProperty(verbose_name=u"網址名稱")
-    title = Fields.StringProperty(verbose_name=u"後台識別名稱")
-    title_lang_zhtw = Fields.StringProperty(verbose_name=u"繁體分類標題")
-    title_lang_zhcn = Fields.StringProperty(verbose_name=u"簡體分類標題")
-    title_lang_enus = Fields.StringProperty(verbose_name=u"英文分類標題")
-    category = Fields.CategoryProperty(kind=Category, verbose_name=u"父類別")
-    must_update_product = Fields.BooleanProperty(default=False, verbose_name=u"必須更新產品")
-    update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u"產品更新時間")
-    update_cursor = Fields.StringProperty(default=u"", verbose_name=u"產品更新指針")
-    is_enable = Fields.BooleanProperty(default=True, verbose_name=u"啟用")
+    name = Fields.StringProperty(verbose_name=u'網址名稱')
+    title = Fields.StringProperty(verbose_name=u'後台識別名稱')
+    title_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體分類標題')
+    title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體分類標題')
+    title_lang_enus = Fields.StringProperty(verbose_name=u'英文分類標題')
+    category = Fields.CategoryProperty(kind=Category, verbose_name=u'父類別')
+    must_update_product = Fields.BooleanProperty(default=False, verbose_name=u'必須更新產品')
+    update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u'產品更新時間')
+    update_cursor = Fields.StringProperty(default=u'', verbose_name=u'產品更新指針')
+    is_enable = Fields.BooleanProperty(default=True, verbose_name=u'啟用')
 
     @classmethod
     def all_enable(cls, category=None, *args, **kwargs):

@@ -298,7 +298,7 @@
         {% if uri_exists_with_permission(action="add") -%}
             <div class="fbtn-container">
                 <div class="fbtn-inner">
-                    <a href="{{uri_action_link('add') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
+                    <a href="{{ uri_action_link('add') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
                 </div>
             </div>
         {%- endif -%}

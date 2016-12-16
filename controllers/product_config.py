@@ -17,11 +17,11 @@ class ProductConfig(Controller):
         pagination_limit = 10
 
     class Scaffold:
-        display_properties_in_list = ("title", "is_enable", "category")
-        hidden_properties_in_edit = ("name",)
+        display_properties_in_list = ('title', 'is_enable', 'category')
+        hidden_properties_in_edit = ('name',)
 
     @route
-    @route_menu(list_name=u"backend", text=u"產品相關設定", sort=1109, group=u"產品維護")
+    @route_menu(list_name=u'backend', text=u'產品相關設定', sort=1109, group=u'產品維護')
     def admin_config(self):
         record = self.meta.Model.find_by_name(self.namespace)
         if record is None:

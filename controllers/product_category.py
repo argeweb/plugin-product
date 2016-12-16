@@ -21,25 +21,25 @@ class ProductCategory(Controller):
         pagination_limit = 1000
 
     class Scaffold:
-        display_properties_in_list = ("name", "title", "title_lang_zhtw", "is_enable", "category")
-        hidden_properties_in_edit = ("must_update_product", "update_timestamp", "update_cursor")
+        display_properties_in_list = ('name', 'title', 'title_lang_zhtw', 'is_enable', 'category')
+        hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_properties_in_from = ()
 
-    @route_menu(list_name=u"backend", text=u"產品分類", sort=1102, group=u"產品維護")
+    @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
     def admin_list(self):
         return scaffold.list(self)
 
     @route
-    @route_menu(list_name=u"backend", text=u"產品分類排列", sort=1103, group=u"產品維護")
+    @route_menu(list_name=u'backend', text=u'產品分類排列', sort=1103, group=u'產品維護')
     def admin_manage(self):
         from ..models.product_config_model import ProductConfigModel
-        self.context["config"] = ProductConfigModel.find_by_name(self.namespace)
+        self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         return scaffold.list(self)
 
     @route
     def admin_change_parent(self):
-        parent = self.params.get_ndb_record("parent")
-        target = self.params.get_ndb_record("target")
+        parent = self.params.get_ndb_record('parent')
+        target = self.params.get_ndb_record('target')
         if parent is not None:
             if parent.key != target.key:
                 target.category = parent.key
@@ -49,16 +49,16 @@ class ProductCategory(Controller):
         target.must_update_timestamp = time.time()
         target.put()
 
-        self.meta.change_view("json")
-        self.context["data"] = {
-            "move": "done"
+        self.meta.change_view('json')
+        self.context['data'] = {
+            'move': 'done'
         }
 
     @route
     def admin_change_sort(self):
-        sort = self.params.get_ndb_record("sort")
-        sort_before = self.params.get_ndb_record("sort_before")
-        target = self.params.get_ndb_record("target")
+        sort = self.params.get_ndb_record('sort')
+        sort_before = self.params.get_ndb_record('sort_before')
+        target = self.params.get_ndb_record('target')
         s = [target.sort]
         if sort is not None:
             s.append(sort.sort)
@@ -89,21 +89,21 @@ class ProductCategory(Controller):
             sort_before.sort = s[2]
             sort_before.put_async()
 
-        self.meta.change_view("json")
-        self.context["data"] = {
-            "sort": "done"
+        self.meta.change_view('json')
+        self.context['data'] = {
+            'sort': 'done'
         }
 
     @route
     def corn_update_product(self):
-        self.meta.change_view("json")
-        self.context["data"] = {
-            "update": "start"
+        self.meta.change_view('json')
+        self.context['data'] = {
+            'update': 'start'
         }
         record = self.meta.Model.need_update_record()
         if record is None:
-            self.context["data"] = {
-                "update": "done"
+            self.context['data'] = {
+                'update': 'done'
             }
             return
         cursor = Cursor(urlsafe=record.update_cursor)
@@ -132,6 +132,6 @@ class ProductCategory(Controller):
         record.must_update_product = more
         record.put_async()
         ndb.put_multi_async(data)
-        self.context["data"] = {
-            "update": record.name
+        self.context['data'] = {
+            'update': record.name
         }

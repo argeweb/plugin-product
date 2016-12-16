@@ -19,12 +19,12 @@ class Product(Controller):
         pagination_limit = 10
 
     class Scaffold:
-        display_properties_in_list = ["name", "title", "is_enable", "category"]
+        display_properties_in_list = ['name', 'title', 'is_enable', 'category']
         hidden_properties_in_edit = []
-        excluded_properties_in_from = ["category_1", "category_2", "category_3", "category_4", "category_5",
-                                       "category_6"]
+        excluded_properties_in_from = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
+                                       'category_6']
 
-    @route_menu(list_name=u"backend", text=u"產品", sort=1101, group=u"產品維護")
+    @route_menu(list_name=u'backend', text=u'產品', sort=1101, group=u'產品維護')
     def admin_list(self):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         return scaffold.list(self)
@@ -44,13 +44,13 @@ class Product(Controller):
     # display_limit_quantity_field = Fields.BooleanProperty(default=True, verbose_name=u"顯示限量商品選項")
 
         if config.custom_product_name is False:
-            scaffold.display_properties_in_list.remove("name")
-            scaffold.hidden_properties_in_edit.append("name")
+            scaffold.display_properties_in_list.remove('name')
+            scaffold.hidden_properties_in_edit.append('name')
 
 
     @staticmethod
     def change_parent_category(*args, **kwargs):
-        item = kwargs["item"]
+        item = kwargs['item']
         category = item.category
         category_list = []
         while category is not None:
@@ -70,7 +70,7 @@ class Product(Controller):
     @csrf_protect
     def admin_add(self):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
-        self.context["config"] = ProductConfigModel.find_by_name(self.namespace)
+        self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         self.events.scaffold_after_save += self.change_parent_category
         return scaffold.add(self)
 
