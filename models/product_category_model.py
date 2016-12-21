@@ -33,10 +33,6 @@ class ProductCategoryModel(BasicModel):
         else:
             return cls.query(cls.category == cat.key, cls.is_enable == True).order(-cls.sort)
 
-    def before_put(self):
-        super(ProductCategoryModel, self).before_put()
-
-
     @classmethod
     def need_update_record(cls, *args, **kwargs):
         return cls.query(cls.must_update_product == True).order(cls.update_timestamp).get()
