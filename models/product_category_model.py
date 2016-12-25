@@ -24,6 +24,10 @@ class ProductCategoryModel(BasicModel):
     is_enable = Fields.BooleanProperty(default=True, verbose_name=u'啟用')
 
     @classmethod
+    def find_by_properties(cls, *args, **kwargs):
+        return cls.find_all_by_properties(**kwargs).get()
+
+    @classmethod
     def all_enable(cls, category=None, *args, **kwargs):
         cat = None
         if category:

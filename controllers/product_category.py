@@ -27,13 +27,13 @@ class ProductCategory(Controller):
 
     @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
     def admin_list(self):
-        return scaffold.list(self)
-
-    @route
-    @route_menu(list_name=u'backend', text=u'產品分類排列', sort=1103, group=u'產品維護')
-    def admin_manage(self):
+        page_view = self.params.get_header('page_view')
         from ..models.product_config_model import ProductConfigModel
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
+        if page_view == u'sort':
+            self.meta.view.template_name = '/product_category/manage.html'
+        else:
+            self.context['change_view_to_sort_function'] = 'reload'
         return scaffold.list(self)
 
     @route
