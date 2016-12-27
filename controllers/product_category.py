@@ -8,6 +8,7 @@
 
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
+from argeweb.components.csrf import CSRF, csrf_protect
 from argeweb import Controller, scaffold, route_menu, Fields, route_with, route
 from argeweb.components.pagination import Pagination
 from argeweb.components.search import Search
@@ -17,7 +18,7 @@ import random
 
 class ProductCategory(Controller):
     class Meta:
-        components = (scaffold.Scaffolding, Pagination, Search)
+        components = (scaffold.Scaffolding, Pagination, Search, CSRF)
         pagination_limit = 1000
 
     class Scaffold:
@@ -25,16 +26,48 @@ class ProductCategory(Controller):
         hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_properties_in_from = ()
 
+    @route_with('/product_category/list.json')
+    def list_json(self):
+        self.meta.change_view('json')
+        # self.meta.view.template_name = '/product_category/json.html'
+        n_data = []
+        data = self.meta.Model.all_enable().fetch(1000)
+        for item in data:
+            parent = ""
+            if item.category is not None:
+                parent = self.util.encode_key(item.category)
+            n_data.append({
+                "key": self.util.encode_key(item),
+                "sort": item.sort,
+                "title": item.title,
+                "name": item.name,
+                "parent": parent
+            })
+        self.context["data"] = n_data
+
+
     @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
     def admin_list(self):
         page_view = self.params.get_header('page_view')
         from ..models.product_config_model import ProductConfigModel
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         if page_view == u'sort':
-            self.meta.view.template_name = '/product_category/manage.html'
+            self.meta.view.template_name = '/product_category/admin_sort.html'
         else:
             self.context['change_view_to_sort_function'] = 'reload'
         return scaffold.list(self)
+
+    @staticmethod
+    def set_must_update_product_true(*args, **kwargs):
+        item = kwargs['item']
+        item.must_update_product = True
+        item.must_update_timestamp = time.time()
+        item.put()
+
+    @csrf_protect
+    def admin_edit(self, key):
+        self.events.scaffold_after_save += self.set_must_update_product_true
+        return scaffold.edit(self, key)
 
     @route
     def admin_change_parent(self):
@@ -128,6 +161,8 @@ class ProductCategory(Controller):
             item.category_4 = category_list[3]
             item.category_5 = category_list[4]
             item.category_6 = category_list[5]
+            if item.lock_brand is False:
+                item.brand = record.brand
         record.update_cursor = next_cursor.urlsafe() if more else None
         record.must_update_product = more
         record.put_async()

@@ -47,15 +47,18 @@ class Product(Controller):
             scaffold.display_properties_in_list.remove('name')
             scaffold.hidden_properties_in_edit.append('name')
 
-
     @staticmethod
     def change_parent_category(*args, **kwargs):
         item = kwargs['item']
         category = item.category
         category_list = []
+        brand = None
         while category is not None:
             category_list.insert(0, category)
-            category = category.get().category
+            get_category = category.get()
+            category = get_category.category
+            if get_category.brand is not None and brand is None:
+                brand = get_category.brand
         c = category_list
         for i in xrange(len(category_list), 6):
             category_list.append(None)
@@ -65,6 +68,8 @@ class Product(Controller):
         item.category_4 = category_list[3]
         item.category_5 = category_list[4]
         item.category_6 = category_list[5]
+        if item.brand is None or item.brand == u'':
+            item.brand = brand
         item.put()
 
     @csrf_protect

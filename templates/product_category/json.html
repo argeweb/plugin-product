@@ -1,0 +1,8 @@
+{%- set list = context["data"] -%}
+var category = (function (data){
+    var root = [];
+    for (var i =0;i
+    console.log(data);
+    return data;
+})([{% for item in list %} {"key" : "{{ item.key }}", "sort": {{ item.sort }}, "parent": "{{ item.parent }}", "title": "{{ item.title }}"}, {% endfor %} ]);
+

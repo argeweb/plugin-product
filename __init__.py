@@ -9,10 +9,13 @@
 from argeweb import datastore
 from models.product_model import ProductModel
 from models.product_model import ProductCategoryModel
+from models.product_model import ProductBrandModel
 
+datastore.register('product', ProductModel.find_by_properties)
 datastore.register('product_list', ProductModel.all_enable)
-datastore.register('product_category', ProductCategoryModel.all_enable)
-datastore.register('product_category_find', ProductCategoryModel.find_by_properties)
+datastore.register('product_brand', ProductBrandModel.find_by_properties)
+datastore.register('product_category', ProductCategoryModel.find_by_properties)
+datastore.register('product_category_list', ProductCategoryModel.all_enable)
 
 plugins_helper = {
     'title': u'產品',
@@ -38,6 +41,17 @@ plugins_helper = {
                 {'action': 'view', 'name': u'檢視產品分類'},
                 {'action': 'delete', 'name': u'刪除產品分類'},
                 {'action': 'manage', 'name': u'產品分類排列'},
+            ]
+        },
+        'product_brand': {
+            'group': u'品牌管理',
+            'actions': [
+                {'action': 'list', 'name': u'品牌管理'},
+                {'action': 'add', 'name': u'新增品牌'},
+                {'action': 'edit', 'name': u'編輯品牌'},
+                {'action': 'view', 'name': u'檢視品牌'},
+                {'action': 'delete', 'name': u'刪除品牌'},
+                {'action': 'manage', 'name': u'品牌排列'},
             ]
         },
         'product_config': {
