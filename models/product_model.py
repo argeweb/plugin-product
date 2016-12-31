@@ -27,7 +27,6 @@ class ProductModel(BasicModel):
     content = Fields.RichTextProperty(verbose_name=u'簡介')
     description = Fields.TextProperty(verbose_name=u'描述')
     info = Fields.TextProperty(verbose_name=u'規格說明')
-    use_sku = Fields.BooleanProperty(verbose_name=u'使用 SKU')
     price = Fields.FloatProperty(default=0.0, verbose_name=u'價格')
     spec_name_1 = Fields.StringProperty(verbose_name=u'規格1')
     spec_name_2 = Fields.StringProperty(verbose_name=u'規格2')

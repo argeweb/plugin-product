@@ -26,7 +26,7 @@ class ProductCategory(Controller):
         hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_properties_in_from = ()
 
-    @route_with('/product_category/list.json')
+    @route_with('/data/product_category/list.json')
     def list_json(self):
         self.meta.change_view('json')
         # self.meta.view.template_name = '/product_category/json.html'
@@ -44,7 +44,6 @@ class ProductCategory(Controller):
                 "parent": parent
             })
         self.context["data"] = n_data
-
 
     @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
     def admin_list(self):

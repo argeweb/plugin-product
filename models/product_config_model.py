@@ -13,6 +13,7 @@ from argeweb import Fields
 class ProductConfigModel(BasicModel):
     name = Fields.StringProperty(verbose_name=u'識別名稱')
     category_depth = Fields.StringProperty(verbose_name=u'分類深度', choices=(u'1', u'2', u'3', u'4', u'5', u'6'))
+    use_sku = Fields.BooleanProperty(verbose_name=u'使用 SKU')
     custom_category_name = Fields.BooleanProperty(default=True, verbose_name=u'自定義分類網址名稱')
     custom_product_name = Fields.BooleanProperty(default=True, verbose_name=u'自定義產品網址名稱')
     display_new_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示最新商品選項')

@@ -1,5 +1,4 @@
 {% import "backend/macros.html" as s with context %}
-{% import 'backend/form_macros.html' as f with context %}
 {% extends s.layout() %}
 {% block layout_header %}{% endblock %}
 {% block layout_content %}
@@ -225,21 +224,21 @@
             $.map(changeList, function(item){
                 var order = "", pos = "", id = item["id"], pid = item["parentId"], compare = item["compare"];
                 if (compare > 1){
-                    order = ", 排在" + $('*[data-key="' + item["order_after"] + '"]').text() + "後";
+                    order = ", 排在 " + page.cleanText($('*[data-key="' + item["order_after"] + '"]').text()) + "後";
                     if (item["order"] == 0){ order = ", 排在該分類的最上方"}
                     page.mustChangePositionList.push({"target": id, "sort": item["order_after"], "sort_before": item["order_before"]});
                 }
                 if (compare == 1 || compare == 3) {
-                    pos = ", 移動到" + ((typeof pid === "undefined") ? "根目錄" : $('*[data-key="' + pid + '"]').text()) + "下";
+                    pos = ", 移動到 " + page.cleanText((typeof pid === "undefined") ? "根目錄" : $('*[data-key="' + pid + '"]').text()) + "下";
                     page.mustChangeParentList.push({"target": id, "parent": pid});
                 }
                 $("#list"+compare).append(
-                    '<li><span class="m-l-xs">' + $('*[data-key="' + id + '"]').text() + pos + order + '</span></li>'
+                    '<li><span class="m-l-xs">' + page.cleanText($('*[data-key="' + id + '"]').text()) + pos + order + '</span></li>'
                 );
             });
             $.map(subCategoryIdList, function(item){
                 $("#list4").append(
-                    '<li><span class="m-l-xs">' + $('*[data-key="' + item["target"] + '"]').text() + ' 需要重整父類別 </span></li>'
+                    '<li><span class="m-l-xs">' + page.cleanText($('*[data-key="' + item["target"] + '"]').text()) + ' 需要重整父類別 </span></li>'
                 );
                 page.mustChangeParentList.push(item);
             });
