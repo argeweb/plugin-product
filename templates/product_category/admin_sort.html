@@ -67,6 +67,9 @@
         page.maxLevel = parseInt('{{ config.category_depth }}');
         page.initList = [];
         page.treeId = "#sTree2";
+        page.cleanText = function(text){
+            return text.replace(" 檢視 ", "").replace(" 編輯 ", "").replace(" 刪除 ", "")
+        };
         page.countParentLevel = function(target){
             // 計算父項目層級 (包含自已)
             var d = 0, i = 0;
@@ -193,7 +196,7 @@
                 var path = is_move ? "change_parent" : "change_sort";
                 var sendP = is_move ? "#sendP1" : "#sendP2";
                 var length = is_move ? page.mustChangeParentList.length : page.mustChangePositionList.length;
-                json("/admin/product_category/" + path, updateTarget, function(data){
+                json("/admin/product/product_category/" + path, updateTarget, function(data){
                     updateTarget["update"] = Date.now();
                     $(sendP).text((i+1) + " / " + length);
                     setTimeout(page.saveChangeList, 80);

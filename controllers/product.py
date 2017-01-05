@@ -19,8 +19,8 @@ class Product(Controller):
         pagination_limit = 10
 
     class Scaffold:
-        display_properties_in_list = ['name', 'title', 'is_enable', 'category']
         hidden_properties_in_edit = []
+        display_properties_in_list = ['name', 'title', 'is_enable', 'category']
         excluded_properties_in_from = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
                                        'category_6']
 
