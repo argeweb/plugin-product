@@ -6,16 +6,16 @@
 # Web: http://www.yooliang.com/
 # Date: 2016/07/08.
 
-from argeweb import datastore
+from argeweb import ViewDatastore
 from models.product_model import ProductModel
 from models.product_model import ProductCategoryModel
 from models.product_model import ProductBrandModel
 
-datastore.register('product', ProductModel.find_by_properties)
-datastore.register('product_list', ProductModel.all_enable)
-datastore.register('product_brand', ProductBrandModel.find_by_properties)
-datastore.register('product_category', ProductCategoryModel.find_by_properties)
-datastore.register('product_category_list', ProductCategoryModel.all_enable)
+ViewDatastore.register('product', ProductModel.find_by_properties)
+ViewDatastore.register('product_list', ProductModel.all_enable)
+ViewDatastore.register('product_brand', ProductBrandModel.find_by_properties)
+ViewDatastore.register('product_category', ProductCategoryModel.find_by_properties)
+ViewDatastore.register('product_category_list', ProductCategoryModel.all_enable)
 
 plugins_helper = {
     'title': u'產品',
