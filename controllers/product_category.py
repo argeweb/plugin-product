@@ -22,7 +22,7 @@ class ProductCategory(Controller):
         pagination_limit = 1000
 
     class Scaffold:
-        display_properties_in_list = ('name', 'title', 'title_lang_zhtw', 'is_enable', 'category')
+        display_properties_in_list = ('name', 'title', 'is_enable', 'category')
         hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_properties_in_from = ()
 

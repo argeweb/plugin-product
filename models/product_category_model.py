@@ -15,16 +15,17 @@ from product_brand_model import ProductBrandModel as Brand
 class ProductCategoryModel(BasicModel):
     class Meta:
         label_name = {
-            'title_lang_zhtw': u'標題',
+            'title': u'分類名稱',
+            'title_lang_zhtw': u'分類名稱',
             'content_lang_zhtw': u'分類說明',
             'image_lang_zhtw': u'形象圖片',
             'description_lang_zhtw': u'網頁描述',
             'keywords_lang_zhtw': u'關鍵字',
         }
     name = Fields.StringProperty(verbose_name=u'識別名稱(網址)')
-    title_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體分類標題')
-    title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體分類標題')
-    title_lang_enus = Fields.StringProperty(verbose_name=u'英文分類標題')
+    title_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體分類名稱')
+    title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體分類名稱')
+    title_lang_enus = Fields.StringProperty(verbose_name=u'英文分類名稱')
 
     category = Fields.CategoryProperty(kind=Category, verbose_name=u'父類別')
     brand = Fields.CategoryProperty(kind=Brand, verbose_name=u'品牌')

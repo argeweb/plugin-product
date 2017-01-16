@@ -34,18 +34,26 @@ class Product(Controller):
         return ProductConfigModel.find_by_name(namespace)
 
     @staticmethod
+    def change_field_config(scaffold, field_name, field_value, show_in_list=False):
+        if field_value is False:
+            if field_name in scaffold.display_properties_in_list:
+                scaffold.display_properties_in_list.remove(field_name)
+            if field_name not in scaffold.hidden_properties_in_edit:
+                scaffold.hidden_properties_in_edit.append(field_name)
+        if field_value is True:
+            if field_name in scaffold.hidden_properties_in_edit:
+                scaffold.hidden_properties_in_edit.remove(field_name)
+            if show_in_list and field_name not in scaffold.display_properties_in_list:
+                scaffold.display_properties_in_list.append(field_name)
+
+    @staticmethod
     def check_field_config(config, scaffold, *args, **kwargs):
-
-    # custom_category_name = Fields.BooleanProperty(default=True, verbose_name=u"自定義分類網址名稱")
-    # custom_product_name = Fields.BooleanProperty(default=True, verbose_name=u"自定義產品網址名稱")
-    # display_new_field = Fields.BooleanProperty(default=True, verbose_name=u"顯示最新商品選項")
-    # display_hot_field = Fields.BooleanProperty(default=True, verbose_name=u"顯示熱門商品選項")
-    # display_limit_time_field = Fields.BooleanProperty(default=True, verbose_name=u"顯示限時商品選項")
-    # display_limit_quantity_field = Fields.BooleanProperty(default=True, verbose_name=u"顯示限量商品選項")
-
-        if config.custom_product_name is False:
-            scaffold.display_properties_in_list.remove('name')
-            scaffold.hidden_properties_in_edit.append('name')
+        Product.change_field_config(scaffold, 'name', config.custom_product_name, True)
+        Product.change_field_config(scaffold, 'is_new', config.display_new_field)
+        Product.change_field_config(scaffold, 'is_hot', config.display_hot_field)
+        Product.change_field_config(scaffold, 'is_limit_quantity', config.display_limit_quantity_field)
+        Product.change_field_config(scaffold, 'is_limit_datetime', config.display_limit_time_field)
+        Product.change_field_config(scaffold, 'limit_end_datetime', config.display_limit_time_field)
 
     @staticmethod
     def change_parent_category(*args, **kwargs):
@@ -77,10 +85,15 @@ class Product(Controller):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         self.events.scaffold_after_save += self.change_parent_category
-        return scaffold.add(self)
+        # if 'sku_link' not in self.Scaffold.hidden_properties_in_edit:
+        #     self.Scaffold.hidden_properties_in_edit.append('sku_link')
+        scaffold.add(self, sku_link='cccccccccccccccccc')
+        return
 
     @csrf_protect
     def admin_edit(self, key):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.events.scaffold_after_save += self.change_parent_category
+        # if 'sku_link' in self.Scaffold.hidden_properties_in_edit:
+        #     self.Scaffold.hidden_properties_in_edit.remove('sku_link')
         return scaffold.edit(self, key)
