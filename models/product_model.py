@@ -14,8 +14,11 @@ from product_brand_model import ProductBrandModel
 
 class ProductModel(BasicModel):
     class Meta:
-        tab_pages = [u'產品基本資料', u'庫存管理']
+        tab_pages = [u'產品基本資料', u'規格管理']
         helper_html = {'tab_page_1': u''}
+
+    sku_link = Fields.SidePanelProperty(verbose_name=u'庫存管理', text=u'點擊此處開啟 庫存管理', tab_page=0,
+                                        uri='admin:product_stock:stock:list_for_side_panel')
 
     name = Fields.StringProperty(verbose_name=u'識別名稱(網址)')
     title = Fields.StringProperty(verbose_name=u'產品名稱')
@@ -37,14 +40,14 @@ class ProductModel(BasicModel):
     is_limit_datetime = Fields.BooleanProperty(default=False, verbose_name=u'顯示為限時產品')
     limit_end_datetime = Fields.DateTimeProperty(auto_now=True, verbose_name=u'最後期限')
     content = Fields.RichTextProperty(verbose_name=u'簡介')
-
-    sku_link = Fields.SidePanelProperty(verbose_name=u'SKU 庫存管理',
-                                          uri='url', text=u'點擊此處開啟 SKU 庫存管理', tab_page=1)
-    bb = Fields.DateProperty(verbose_name=u'DateProperty', tab_page=1)
     info = Fields.TextProperty(verbose_name=u'規格說明', tab_page=1)
-    price = Fields.FloatProperty(default=0.0, verbose_name=u'價格', tab_page=1)
-    spec_name_1 = Fields.StringProperty(verbose_name=u'規格1', tab_page=1)
-    spec_name_2 = Fields.StringProperty(verbose_name=u'規格2', tab_page=1)
+    # price = Fields.FloatProperty(default=0.0, verbose_name=u'價格', tab_page=1)
+    sku_prev_name = Fields.StringProperty(verbose_name=u'sku 前置編號')
+    spec_1 = Fields.StringProperty(verbose_name=u'規格 1', tab_page=1)
+    spec_2 = Fields.StringProperty(verbose_name=u'規格 2', tab_page=1)
+    spec_3 = Fields.StringProperty(verbose_name=u'規格 3', tab_page=1)
+    spec_4 = Fields.StringProperty(verbose_name=u'規格 4', tab_page=1)
+    spec_5 = Fields.StringProperty(verbose_name=u'規格 5', tab_page=1)
 
     @classmethod
     def all_enable(cls, category=None, *args, **kwargs):

@@ -20,3 +20,5 @@ class ProductConfigModel(BasicModel):
     display_hot_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示熱門商品選項')
     display_limit_time_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示限時商品選項')
     display_limit_quantity_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示限量商品選項')
+    stock_recover = Fields.BooleanProperty(default=False, verbose_name=u'使用庫存量回收機制')
+    stock_recover_time = Fields.IntegerProperty(default=4320, verbose_name=u'庫存量回收時間')
