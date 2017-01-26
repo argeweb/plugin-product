@@ -21,9 +21,9 @@ class ProductBrand(Controller):
         pagination_limit = 1000
 
     class Scaffold:
-        display_properties_in_list = ('name', 'title_lang_zhtw', 'description_lang_zhtw')
-        hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor', 'is_enable')
-        excluded_properties_in_from = ()
+        display_in_list = ('name', 'title_lang_zhtw', 'description_lang_zhtw')
+        hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor', 'is_enable')
+        excluded_in_form = ()
 
     @route_menu(list_name=u'backend', text=u'品牌管理', sort=1103, group=u'產品維護')
     def admin_list(self):

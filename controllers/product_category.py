@@ -22,9 +22,9 @@ class ProductCategory(Controller):
         pagination_limit = 1000
 
     class Scaffold:
-        display_properties_in_list = ('name', 'title', 'is_enable', 'category')
-        hidden_properties_in_edit = ('must_update_product', 'update_timestamp', 'update_cursor')
-        excluded_properties_in_from = ()
+        display_in_list = ('name', 'title', 'is_enable', 'category')
+        hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor')
+        excluded_in_form = ()
 
     @route_with('/data/product_category/list.json')
     def list_json(self):

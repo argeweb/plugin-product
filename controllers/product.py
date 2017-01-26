@@ -19,9 +19,9 @@ class Product(Controller):
         pagination_limit = 10
 
     class Scaffold:
-        hidden_properties_in_edit = []
-        display_properties_in_list = ['name', 'title', 'is_enable', 'category']
-        excluded_properties_in_from = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
+        hidden_in_form = []
+        display_in_list = ['name', 'title', 'is_enable', 'category']
+        excluded_in_form = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
                                        'category_6']
 
     @route_menu(list_name=u'backend', text=u'產品', sort=1101, group=u'產品維護')
@@ -36,15 +36,15 @@ class Product(Controller):
     @staticmethod
     def change_field_config(scaffold, field_name, field_value, show_in_list=False):
         if field_value is False:
-            if field_name in scaffold.display_properties_in_list:
-                scaffold.display_properties_in_list.remove(field_name)
-            if field_name not in scaffold.hidden_properties_in_edit:
-                scaffold.hidden_properties_in_edit.append(field_name)
+            if field_name in scaffold.display_in_list:
+                scaffold.display_in_list.remove(field_name)
+            if field_name not in scaffold.hidden_in_form:
+                scaffold.hidden_in_form.append(field_name)
         if field_value is True:
-            if field_name in scaffold.hidden_properties_in_edit:
-                scaffold.hidden_properties_in_edit.remove(field_name)
-            if show_in_list and field_name not in scaffold.display_properties_in_list:
-                scaffold.display_properties_in_list.append(field_name)
+            if field_name in scaffold.hidden_in_form:
+                scaffold.hidden_in_form.remove(field_name)
+            if show_in_list and field_name not in scaffold.display_in_list:
+                scaffold.display_in_list.append(field_name)
 
     @staticmethod
     def check_field_config(config, scaffold, *args, **kwargs):
@@ -85,8 +85,8 @@ class Product(Controller):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         self.events.scaffold_after_save += self.change_parent_category
-        # if 'sku_link' not in self.Scaffold.hidden_properties_in_edit:
-        #     self.Scaffold.hidden_properties_in_edit.append('sku_link')
+        # if 'sku_link' not in self.Scaffold.hidden_in_form:
+        #     self.Scaffold.hidden_in_form.append('sku_link')
         scaffold.add(self, sku_link='cccccccccccccccccc')
         return
 
@@ -94,6 +94,6 @@ class Product(Controller):
     def admin_edit(self, key):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.events.scaffold_after_save += self.change_parent_category
-        # if 'sku_link' in self.Scaffold.hidden_properties_in_edit:
-        #     self.Scaffold.hidden_properties_in_edit.remove('sku_link')
+        # if 'sku_link' in self.Scaffold.hidden_in_form:
+        #     self.Scaffold.hidden_in_form.remove('sku_link')
         return scaffold.edit(self, key)
