@@ -19,7 +19,7 @@ class ProductBrandModel(BasicModel):
             'description_lang_zhtw': u'網頁描述',
             'keywords_lang_zhtw': u'關鍵字',
         }
-    name = Fields.StringProperty(verbose_name=u'識別名稱(網址)')
+    name = Fields.StringProperty(verbose_name=u'系統編號')
     title_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體品牌名稱')
     title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體品牌名稱')
     title_lang_enus = Fields.StringProperty(verbose_name=u'英文品牌名稱')
