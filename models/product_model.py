@@ -14,7 +14,7 @@ from product_brand_model import ProductBrandModel
 
 class ProductModel(BasicModel):
     class Meta:
-        tab_pages = [u'產品資料', u'規格管理', u'狀態管理']
+        tab_pages = [u'產品資料', u'規格管理', u'狀態管理', u'產品圖片']
         helper_html = {'tab_page_1': u''}
 
     name = Fields.StringProperty(verbose_name=u'系統編號')
@@ -29,7 +29,11 @@ class ProductModel(BasicModel):
     brand = Fields.CategoryProperty(kind=ProductBrandModel, verbose_name=u'品牌')
     lock_brand = Fields.BooleanProperty(default=False, verbose_name=u'鎖定品牌(不受分類影響)')
     description = Fields.TextProperty(verbose_name=u'描述')
-    image = Fields.ImageProperty(verbose_name=u'圖片')
+    image = Fields.ImageProperty(verbose_name=u'圖片 1', tab_page=3)
+    image_2 = Fields.ImageProperty(verbose_name=u'圖片 2', tab_page=3)
+    image_3 = Fields.ImageProperty(verbose_name=u'圖片 3', tab_page=3)
+    image_4 = Fields.ImageProperty(verbose_name=u'圖片 4', tab_page=3)
+    image_5 = Fields.ImageProperty(verbose_name=u'圖片 5', tab_page=3)
     content = Fields.RichTextProperty(verbose_name=u'簡介')
 
     sku_link = Fields.SidePanelProperty(verbose_name=u'庫存管理', text=u'點擊此處開啟 庫存管理', tab_page=1,
