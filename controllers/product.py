@@ -85,15 +85,10 @@ class Product(Controller):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         self.events.scaffold_after_save += self.change_parent_category
-        # if 'sku_link' not in self.Scaffold.hidden_in_form:
-        #     self.Scaffold.hidden_in_form.append('sku_link')
-        scaffold.add(self, sku_link='cccccccccccccccccc')
-        return
+        return scaffold.add(self)
 
     @csrf_protect
     def admin_edit(self, key):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.events.scaffold_after_save += self.change_parent_category
-        # if 'sku_link' in self.Scaffold.hidden_in_form:
-        #     self.Scaffold.hidden_in_form.remove('sku_link')
         return scaffold.edit(self, key)
