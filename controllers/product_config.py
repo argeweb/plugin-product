@@ -21,7 +21,7 @@ class ProductConfig(Controller):
         hidden_in_form = ('name',)
 
     @route
-    @route_menu(list_name=u'backend', text=u'產品相關設定', sort=9971, group=u'系統設定')
+    @route_menu(list_name=u'backend', text=u'產品相關設定', sort=9930, group=u'系統設定', need_hr=True)
     def admin_config(self):
         record = self.meta.Model.find_by_name(self.namespace)
         if record is None:
