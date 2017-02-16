@@ -13,6 +13,9 @@ from models.product_model import ProductBrandModel
 
 ViewDatastore.register('product', ProductModel.find_by_properties)
 ViewDatastore.register('product_list', ProductModel.all_enable)
+ViewDatastore.register('new_product_list', ProductModel.all_new)
+ViewDatastore.register('hot_product_list', ProductModel.all_hot)
+ViewDatastore.register('recommend_product_list', ProductModel.all_recommend)
 ViewDatastore.register('product_brand', ProductBrandModel.find_by_properties)
 ViewDatastore.register('product_category', ProductCategoryModel.find_by_properties)
 ViewDatastore.register('product_category_list', ProductCategoryModel.all_enable)

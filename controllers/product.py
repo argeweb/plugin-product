@@ -51,6 +51,7 @@ class Product(Controller):
         Product.change_field_config(scaffold, 'name', config.custom_product_name, True)
         Product.change_field_config(scaffold, 'is_new', config.display_new_field)
         Product.change_field_config(scaffold, 'is_hot', config.display_hot_field)
+        Product.change_field_config(scaffold, 'is_recommend', config.display_recommend_field)
         Product.change_field_config(scaffold, 'is_limit_quantity', config.display_limit_quantity_field)
         Product.change_field_config(scaffold, 'is_limit_datetime', config.display_limit_time_field)
         Product.change_field_config(scaffold, 'limit_end_datetime', config.display_limit_time_field)
@@ -83,7 +84,6 @@ class Product(Controller):
     @csrf_protect
     def admin_add(self):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
-        self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         self.events.scaffold_after_save += self.change_parent_category
         return scaffold.add(self)
 

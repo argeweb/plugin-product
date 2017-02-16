@@ -48,6 +48,7 @@ class ProductModel(BasicModel):
     spec_5 = Fields.StringProperty(verbose_name=u'規格 5', tab_page=1)
 
     is_enable = Fields.BooleanProperty(default=True, verbose_name=u'啟用', tab_page=2)
+    is_recommend = Fields.BooleanProperty(default=False, verbose_name=u'顯示為推薦商品', tab_page=2)
     is_new = Fields.BooleanProperty(default=False, verbose_name=u'顯示為最新產品', tab_page=2)
     is_hot = Fields.BooleanProperty(default=False, verbose_name=u'顯示為熱門產品', tab_page=2)
     is_limit_quantity = Fields.BooleanProperty(default=False, verbose_name=u'顯示為限量產品', tab_page=2)
@@ -63,3 +64,33 @@ class ProductModel(BasicModel):
             return cls.query(cls.is_enable==True).order(-cls.sort)
         else:
             return cls.query(cls.category==cat.key, cls.is_enable==True).order(-cls.sort)
+
+    @classmethod
+    def all_new(cls, category=None, *args, **kwargs):
+        cat = None
+        if category:
+            cat = ProductCategoryModel.find_by_name(category)
+        if cat is None:
+            return cls.query(cls.is_enable==True, cls.is_new==True).order(-cls.sort)
+        else:
+            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_new==True).order(-cls.sort)
+
+    @classmethod
+    def all_hot(cls, category=None, *args, **kwargs):
+        cat = None
+        if category:
+            cat = ProductCategoryModel.find_by_name(category)
+        if cat is None:
+            return cls.query(cls.is_enable==True, cls.is_hot==True).order(-cls.sort)
+        else:
+            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_hot==True).order(-cls.sort)
+
+    @classmethod
+    def all_recommend(cls, category=None, *args, **kwargs):
+        cat = None
+        if category:
+            cat = ProductCategoryModel.find_by_name(category)
+        if cat is None:
+            return cls.query(cls.is_enable==True, cls.is_recommend==True).order(-cls.sort)
+        else:
+            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_recommend==True).order(-cls.sort)
