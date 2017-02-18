@@ -10,6 +10,7 @@ from argeweb import BasicModel
 from argeweb import Fields
 from product_category_model import ProductCategoryModel
 from product_brand_model import ProductBrandModel
+from google.appengine.ext import ndb
 
 
 class ProductModel(BasicModel):
@@ -19,6 +20,7 @@ class ProductModel(BasicModel):
 
     name = Fields.StringProperty(verbose_name=u'系統編號')
     title = Fields.StringProperty(verbose_name=u'產品名稱')
+    product_no = Fields.StringProperty(verbose_name=u'產品編號')
     category = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'分類')
     category_1 = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'類別 1')
     category_2 = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'類別 2')
@@ -63,7 +65,10 @@ class ProductModel(BasicModel):
         if cat is None:
             return cls.query(cls.is_enable==True).order(-cls.sort)
         else:
-            return cls.query(cls.category==cat.key, cls.is_enable==True).order(-cls.sort)
+            return cls.query(ndb.AND(ndb.OR(
+                cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
+                cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
+                cls.is_enable==True)).order(-cls.sort)
 
     @classmethod
     def all_new(cls, category=None, *args, **kwargs):
@@ -73,7 +78,10 @@ class ProductModel(BasicModel):
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_new==True).order(-cls.sort)
         else:
-            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_new==True).order(-cls.sort)
+            return cls.query(ndb.AND(ndb.OR(
+                cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
+                cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
+                cls.is_enable==True, cls.is_new==True)).order(-cls.sort)
 
     @classmethod
     def all_hot(cls, category=None, *args, **kwargs):
@@ -83,7 +91,10 @@ class ProductModel(BasicModel):
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_hot==True).order(-cls.sort)
         else:
-            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_hot==True).order(-cls.sort)
+            return cls.query(ndb.AND(ndb.OR(
+                cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
+                cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
+                cls.is_enable==True, cls.is_hot==True)).order(-cls.sort)
 
     @classmethod
     def all_recommend(cls, category=None, *args, **kwargs):
@@ -93,4 +104,7 @@ class ProductModel(BasicModel):
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_recommend==True).order(-cls.sort)
         else:
-            return cls.query(cls.category==cat.key, cls.is_enable==True, cls.is_recommend==True).order(-cls.sort)
+            return cls.query(ndb.AND(ndb.OR(
+                cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
+                cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
+                cls.is_enable==True, cls.is_recommend==True)).order(-cls.sort)
