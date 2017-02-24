@@ -52,6 +52,9 @@ class ProductCategory(Controller):
         self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
         if page_view == u'sort':
             self.meta.view.template_name = '/product_category/admin_sort.html'
+            self.context['change_view_to_edit_function'] = 'reload'
+            self.context['change_view_to_view_function'] = 'reload'
+            self.context['change_view_to_delete_function'] = 'reload'
         else:
             self.context['change_view_to_sort_function'] = 'reload'
         return scaffold.list(self)

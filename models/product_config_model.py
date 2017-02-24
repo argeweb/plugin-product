@@ -19,6 +19,8 @@ class ProductConfigModel(BasicModel):
     display_recommend_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 推薦商品 勾選欄位')
     display_new_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 最新商品 勾選欄位')
     display_hot_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 熱門商品 勾選欄位')
+    display_on_sell_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 特價商品 勾選欄位')
+    display_sell_well_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 熱銷商品 勾選欄位')
     auto_count_hot_time = Fields.IntegerProperty(default=4320, verbose_name=u'熱門商品計算時間(分)')
     display_limit_time_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 限時商品 勾選欄位')
     display_limit_quantity_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 限量商品 勾選欄位')
