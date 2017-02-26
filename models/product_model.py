@@ -150,6 +150,6 @@ class ProductModel(BasicModel):
     def sku_list(self):
         try:
             from plugins.product_stock.models.stock_keeping_unit_model import StockKeepingUnitModel as S
-            return S.all().filter(S.category == self.key).order(S.spec_full_name)
+            return S.all().filter(S.product == self.key).order(S.spec_full_name)
         except:
             return []
