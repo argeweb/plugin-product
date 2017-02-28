@@ -26,25 +26,6 @@ class ProductCategory(Controller):
         hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_in_form = ()
 
-    @route_with('/data/product_category/list.json')
-    def list_json(self):
-        self.meta.change_view('json')
-        # self.meta.view.template_name = '/product_category/json.html'
-        n_data = []
-        data = self.meta.Model.all_enable().fetch(1000)
-        for item in data:
-            parent = ""
-            if item.category is not None:
-                parent = self.util.encode_key(item.category)
-            n_data.append({
-                "key": self.util.encode_key(item),
-                "sort": item.sort,
-                "title": item.title,
-                "name": item.name,
-                "parent": parent
-            })
-        self.context["data"] = n_data
-
     @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
     def admin_list(self):
         page_view = self.params.get_header('page_view')
