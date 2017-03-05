@@ -61,6 +61,7 @@ class ProductModel(BasicModel):
     image_4 = Fields.ImageProperty(verbose_name=u'圖片 4', tab_page=3)
     image_5 = Fields.ImageProperty(verbose_name=u'圖片 5', tab_page=3)
 
+    old_price = Fields.StringProperty(verbose_name=u'原價(僅顯示用)', tab_page=4, default=u'')
     helper_1 = Fields.StringProperty(verbose_name=u'重量', tab_page=4, default=u'')
     helper_2 = Fields.StringProperty(verbose_name=u'尺寸', tab_page=4, default=u'')
     helper_3 = Fields.StringProperty(verbose_name=u'成分/材質', tab_page=4, default=u'')
@@ -145,6 +146,19 @@ class ProductModel(BasicModel):
                 cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
                 cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
                 cls.is_enable==True, cls.is_sell_well==True)).order(-cls.sort)
+
+    @classmethod
+    def all_limit_quantity(cls, category=None, *args, **kwargs):
+        cat = None
+        if category:
+            cat = ProductCategoryModel.find_by_name(category)
+        if cat is None:
+            return cls.query(cls.is_enable==True, cls.is_limit_quantity==True).order(-cls.sort)
+        else:
+            return cls.query(ndb.AND(ndb.OR(
+                cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
+                cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
+                cls.is_enable==True, cls.is_limit_quantity==True)).order(-cls.sort)
 
     @property
     def sku_list(self):
