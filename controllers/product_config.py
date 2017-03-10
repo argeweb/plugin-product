@@ -14,7 +14,7 @@ from argeweb.components.search import Search
 class ProductConfig(Controller):
     class Meta:
         components = (scaffold.Scaffolding, Pagination, Search)
-        pagination_limit = 10
+        pagination_limit = 50
 
     class Scaffold:
         display_in_list = ('title', 'is_enable', 'category')
