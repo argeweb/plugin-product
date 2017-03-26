@@ -18,7 +18,6 @@ import random
 class ProductBrand(Controller):
     class Meta:
         components = (scaffold.Scaffolding, Pagination, Search)
-        pagination_limit = 50
 
     class Scaffold:
         display_in_list = ('name', 'title_lang_zhtw', 'description_lang_zhtw')

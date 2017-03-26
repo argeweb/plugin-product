@@ -16,7 +16,6 @@ from ..models.product_config_model import ProductConfigModel
 class Product(Controller):
     class Meta:
         components = (scaffold.Scaffolding, Pagination, Search, CSRF)
-        pagination_limit = 50
 
     class Scaffold:
         hidden_in_form = []

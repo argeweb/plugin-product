@@ -15,9 +15,9 @@ from google.appengine.ext import ndb
 
 class ProductModel(BasicModel):
     class Meta:
-        tab_pages = [u'產品資料', u'規格管理', u'狀態管理', u'產品圖片', u'輔助說明']
+        tab_pages = [u'產品資料', u'規格', u'狀態', u'圖片', u'說明']
 
-    name = Fields.StringProperty(verbose_name=u'系統編號')
+    name = Fields.StringProperty(verbose_name=u'識別名稱')
     title = Fields.StringProperty(verbose_name=u'產品名稱')
     product_no = Fields.StringProperty(verbose_name=u'產品編號')
     category = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'分類')
