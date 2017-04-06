@@ -204,7 +204,7 @@
                 page.initList = $(page.treeId).sortableListsToArray();
                 page.compare();
                 $(".update-button").prop("disabled", false);
-                backend.message.quick_show("更新完成", 1800);
+                backend.message.alert("更新完成", 1800);
                 page.updateProduct(10000);
                 page.updateProduct(20000);
                 page.updateProduct(30000);

@@ -26,3 +26,8 @@ class ProductConfigModel(BasicModel):
     display_limit_quantity_field = Fields.BooleanProperty(default=True, verbose_name=u'顯示 限量商品 勾選欄位')
     stock_recover = Fields.BooleanProperty(default=False, verbose_name=u'使用庫存量回收機制')
     stock_recover_time = Fields.IntegerProperty(default=4320, verbose_name=u'庫存量回收時間(分)')
+
+    @classmethod
+    def find_by_product(cls, product):
+        namespace = product._key._Key__namespace
+        return ProductConfigModel.find_by_name(namespace)
