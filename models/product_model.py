@@ -17,6 +17,8 @@ class ProductModel(BasicModel):
     class Meta:
         tab_pages = [u'產品資料', u'規格', u'狀態', u'圖片', u'說明']
 
+    sku_link = Fields.SidePanelProperty(verbose_name=u'庫存管理', text=u'點擊此處開啟 庫存管理', tab_page=0,
+                                        uri='admin:product_stock:stock:list_for_side_panel')
     name = Fields.StringProperty(verbose_name=u'識別名稱')
     title = Fields.StringProperty(verbose_name=u'產品名稱')
     product_no = Fields.StringProperty(verbose_name=u'產品編號')
@@ -32,10 +34,9 @@ class ProductModel(BasicModel):
     description = Fields.TextProperty(verbose_name=u'描述')
     content = Fields.RichTextProperty(verbose_name=u'詳細說明')
 
-    sku_link = Fields.SidePanelProperty(verbose_name=u'庫存管理', text=u'點擊此處開啟 庫存管理', tab_page=1,
-                                        uri='admin:product_stock:stock:list_for_side_panel')
     info = Fields.TextProperty(verbose_name=u'規格說明', tab_page=1)
     price = Fields.FloatProperty(verbose_name=u'銷售價格', default=0, tab_page=1)
+    cost = Fields.FloatProperty(verbose_name=u'成本', default=0.0, tab_page=1)
     sku_prev_name = Fields.StringProperty(verbose_name=u'sku 前置編號', tab_page=1)
     spec_1 = Fields.StringProperty(verbose_name=u'規格 1', tab_page=1)
     spec_2 = Fields.StringProperty(verbose_name=u'規格 2', tab_page=1)
