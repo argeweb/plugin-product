@@ -100,3 +100,10 @@ class ProductCategoryModel(BasicModel):
     @classmethod
     def need_update_record(cls, *args, **kwargs):
         return cls.query(cls.must_update_product == True).order(cls.update_timestamp).get()
+
+    def after_put(self, key):
+        if self.must_update_product is True:
+            from google.appengine.api import taskqueue
+            task = taskqueue.add(
+                url='/product/product_category/corn_update_product',
+                params={})

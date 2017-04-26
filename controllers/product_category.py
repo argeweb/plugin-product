@@ -150,6 +150,7 @@ class ProductCategory(Controller):
         record.must_update_product = more
         record.put_async()
         ndb.put_multi_async(data)
+
         self.context['data'] = {
             'update': record.name
         }
