@@ -105,5 +105,5 @@ class ProductCategoryModel(BasicModel):
         if self.must_update_product is True:
             from google.appengine.api import taskqueue
             task = taskqueue.add(
-                url='/product/product_category/corn_update_product',
+                url='/taskqueue/product/product_category/update_product',
                 params={})

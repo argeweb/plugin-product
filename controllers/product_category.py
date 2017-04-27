@@ -111,7 +111,7 @@ class ProductCategory(Controller):
         }
 
     @route
-    def corn_update_product(self):
+    def taskqueue_update_product(self):
         self.meta.change_view('json')
         self.context['data'] = {
             'update': 'start'
