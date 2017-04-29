@@ -26,7 +26,7 @@ class ProductCategory(Controller):
         hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor')
         excluded_in_form = ()
 
-    @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品維護')
+    @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品銷售')
     def admin_list(self):
         page_view = self.params.get_header('page_view')
         from ..models.product_config_model import ProductConfigModel

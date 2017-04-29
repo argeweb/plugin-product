@@ -23,7 +23,8 @@ class Product(Controller):
         excluded_in_form = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
                                        'category_6']
 
-    @route_menu(list_name=u'backend', text=u'產品', sort=1101, group=u'產品維護')
+    @route_menu(list_name=u'welcome', text=u'產品管理', sort=1101)
+    @route_menu(list_name=u'backend', text=u'產品', sort=1101, group=u'產品銷售')
     def admin_list(self):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         return scaffold.list(self)

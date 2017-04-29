@@ -167,3 +167,9 @@ class ProductModel(BasicModel):
             return StockKeepingUnitModel.find_by_product(self)
         except:
             return []
+
+    def after_put(self, key):
+        from google.appengine.api import taskqueue
+        task = taskqueue.add(
+            url='/taskqueue/product_stock/stock/update_sku_information',
+            params={'product': key})
