@@ -57,7 +57,6 @@ plugins_helper = {
                 {'action': 'edit', 'name': u'編輯品牌'},
                 {'action': 'view', 'name': u'檢視品牌'},
                 {'action': 'delete', 'name': u'刪除品牌'},
-                {'action': 'manage', 'name': u'品牌排列'},
             ]
         },
         'product_config': {
