@@ -51,6 +51,7 @@ class Product(Controller):
         Product.change_field_config(scaffold, 'name', config.custom_product_name, True)
         Product.change_field_config(scaffold, 'is_new', config.display_new_field)
         Product.change_field_config(scaffold, 'is_hot', config.display_hot_field)
+        Product.change_field_config(scaffold, 'sku_link', config.use_sku)
         Product.change_field_config(scaffold, 'is_recommend', config.display_recommend_field)
         Product.change_field_config(scaffold, 'is_on_sell', config.display_hot_field)
         Product.change_field_config(scaffold, 'is_sell_well', config.display_recommend_field)
