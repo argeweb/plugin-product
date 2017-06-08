@@ -65,5 +65,6 @@ plugins_helper = {
                 {'action': 'config', 'name': u'產品相關設定'},
             ]
         },
-    }
+    },
+    'install_uri': 'product:product_config:after_install'
 }

@@ -16,9 +16,6 @@ import random
 
 
 class ProductBrand(Controller):
-    class Meta:
-        components = (scaffold.Scaffolding, Pagination, Search)
-
     class Scaffold:
         display_in_list = ('name', 'title_lang_zhtw', 'description_lang_zhtw')
         hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor', 'is_enable')

@@ -12,9 +12,6 @@ from argeweb.components.search import Search
 
 
 class ProductConfig(Controller):
-    class Meta:
-        components = (scaffold.Scaffolding, Pagination, Search)
-
     class Scaffold:
         display_in_list = ('title', 'is_enable', 'category')
         hidden_in_form = ('name',)
@@ -24,8 +21,20 @@ class ProductConfig(Controller):
     def admin_config(self):
         record = self.meta.Model.find_by_name(self.namespace)
         if record is None:
-            record = self.meta.Model()
+            record = self.meta.model()
             record.name = self.namespace
             record.put()
         return scaffold.edit(self, record.key)
 
+    @route
+    def taskqueue_after_install(self):
+        try:
+            record = self.meta.Model.find_by_name(self.namespace)
+            if record is None:
+                record = self.meta.Model()
+                record.name = self.namespace
+                record.put()
+            return 'done'
+        except ImportError:
+            self.logging.error(u'需要 "付款中間層"')
+            return 'ImportError'

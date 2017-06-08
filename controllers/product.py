@@ -95,3 +95,4 @@ class Product(Controller):
         self.check_field_config(self.get_config(self.namespace), self.Scaffold)
         self.events.scaffold_after_save += self.change_parent_category
         return scaffold.edit(self, key)
+
