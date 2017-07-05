@@ -1,0 +1,180 @@
+- kind: ProductModel
+  properties:
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_limit_quantity
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
+  - name: is_limit_quantity
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_sell_well
+  - name: sort
+    direction: desc
+
+- kind: ProductCategoryModel
+  properties:
+  - name: category
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductCategoryModel
+  properties:
+  - name: category
+  - name: sort
+    direction: desc
+
+- kind: ProductCategoryModel
+  properties:
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductCategoryModel
+  properties:
+  - name: must_update_product
+  - name: update_timestamp
+
+- kind: ProductModel
+  properties:
+  - name: category
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_1
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_1
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_2
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_2
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_3
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_3
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_4
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_4
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_5
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_5
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_6
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: category_6
+  - name: is_enable
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
+  - name: is_hot
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
+  - name: is_on_sell
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
+  - name: is_recommend
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
+  - name: sort
+    direction: desc
