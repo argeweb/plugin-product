@@ -1,7 +1,8 @@
 {% extends "backend/list_layout.html" %}
 {% block layout_header %}{% endblock %}
 {% block layout_content %}
-<div class="ibox-content m-b-sm border-bottom">
+<script src="/static/vendor/jquery-sortable-lists/jquery-sortable-lists.min.js"></script>
+<div class="ibox-content m-b-sm border-bottom page-header-big">
     <div class="p-xs">
         <div class="pull-left m-r-md">
             <i class="material-icons mid-icon brand-text-color">shopping_cart</i>
@@ -11,7 +12,6 @@
         {% if last_record_date %}<span class="text-muted small pull-right visible-sm visible-md visible-lg">最後更新：<i class="icon">access_time</i> {{ print_value(last_record_date) }}</span>{% endif %}
     </div>
 </div>
-<script src="/static/vendor/jquery-sortable-lists/jquery-sortable-lists.min.js"></script>
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-sm-6">
@@ -298,10 +298,10 @@
 </script>
 {% endblock %}
 
-{% block layout_buttons %}
+{% block layout_header_buttons %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action="add") -%}
-            <a href="{{ uri_action_link('add') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
+            <a href="{{ uri_action_link('add') }}" class="btn btn-white"><i class="icon">add_circle</i> {{ s.scaffold_title("add") }}</a>
         {%- endif -%}
     {%- endif %}
 {% endblock %}
