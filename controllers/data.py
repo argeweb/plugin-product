@@ -5,13 +5,10 @@
 # Author: Qi-Liang Wen (温啓良）
 # Web: http://www.yooliang.com/
 # Date: 2015/7/12.
-from datetime import datetime
-from argeweb import Controller, scaffold, route_menu, route_with, route, settings
-from argeweb import auth, add_authorizations
+from argeweb import Controller, scaffold, route_with, route
 from argeweb.components.pagination import Pagination
 from argeweb.components.csrf import CSRF, csrf_protect
 from argeweb.components.search import Search
-from plugins.mail import Mail
 from ..models.product_category_model import ProductCategoryModel
 
 

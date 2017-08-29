@@ -6,11 +6,11 @@
 # Web: http://www.yooliang.com/
 # Date: 2015/7/12.
 
-from argeweb import Controller, scaffold, route_menu, Fields, route_with, route
+from argeweb import Controller, scaffold, route_menu
 from argeweb.components.pagination import Pagination
 from argeweb.components.search import Search
 from argeweb.components.csrf import CSRF, csrf_protect
-from ..models.product_config_model import ProductConfigModel
+from ..models.config_model import ConfigModel
 
 
 class Product(Controller):
@@ -19,45 +19,52 @@ class Product(Controller):
 
     class Scaffold:
         hidden_in_form = []
-        display_in_list = ['name', 'title', 'is_enable', 'category']
-        excluded_in_form = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5',
-                                       'category_6']
+        display_in_list = ['image', 'title', 'product_no', 'price', 'is_enable', 'category']
+        excluded_in_form = ['category_1', 'category_2', 'category_3', 'category_4', 'category_5', 'category_6']
 
     @route_menu(list_name=u'welcome', text=u'產品管理', sort=1101)
-    @route_menu(list_name=u'backend', text=u'產品', sort=1101, group=u'產品銷售')
+    @route_menu(list_name=u'backend', group=u'產品管理', text=u'產品', sort=1101)
     def admin_list(self):
-        self.check_field_config(self.get_config(self.namespace), self.Scaffold)
+        config = self.get_config('product_config')
+        self.check_field_config(config, self.scaffold)
+        self.fire('change_product_filed_config', config=config)
         return scaffold.list(self)
 
-    @staticmethod
-    def get_config(namespace):
-        return ProductConfigModel.find_by_name(namespace)
+    @csrf_protect
+    def admin_add(self):
+        config = self.get_config('product_config')
+        self.check_field_config(config, self.scaffold)
+        self.fire('change_product_filed_config', config=config)
+        self.events.scaffold_after_save += self.change_parent_category
+        return scaffold.add(self)
+
+    @csrf_protect
+    def admin_edit(self, key):
+        config = self.get_config('product_config')
+        self.check_field_config(config, self.scaffold)
+        self.fire('change_product_filed_config', config=config)
+        self.events.scaffold_after_save += self.change_parent_category
+        return scaffold.edit(self, key)
 
     @staticmethod
-    def change_field_config(scaffold, field_name, field_value, show_in_list=False):
-        if field_value is False:
-            if field_name in scaffold.display_in_list:
-                scaffold.display_in_list.remove(field_name)
-            if field_name not in scaffold.hidden_in_form:
-                scaffold.hidden_in_form.append(field_name)
-        if field_value is True:
-            if field_name in scaffold.hidden_in_form:
-                scaffold.hidden_in_form.remove(field_name)
-            if show_in_list and field_name not in scaffold.display_in_list:
-                scaffold.display_in_list.append(field_name)
+    def get_config(config_name):
+        return ConfigModel.get_or_create_by_name(config_name)
 
     @staticmethod
     def check_field_config(config, scaffold, *args, **kwargs):
-        Product.change_field_config(scaffold, 'name', config.custom_product_name, True)
-        Product.change_field_config(scaffold, 'is_new', config.display_new_field)
-        Product.change_field_config(scaffold, 'is_hot', config.display_hot_field)
-        Product.change_field_config(scaffold, 'sku_link', config.use_sku)
-        Product.change_field_config(scaffold, 'is_recommend', config.display_recommend_field)
-        Product.change_field_config(scaffold, 'is_on_sell', config.display_hot_field)
-        Product.change_field_config(scaffold, 'is_sell_well', config.display_recommend_field)
-        Product.change_field_config(scaffold, 'is_limit_quantity', config.display_limit_quantity_field)
-        Product.change_field_config(scaffold, 'is_limit_datetime', config.display_limit_time_field)
-        Product.change_field_config(scaffold, 'limit_end_datetime', config.display_limit_time_field)
+        scaffold.change_field_visibility('sku_link', False)
+        scaffold.change_field_visibility('supplier', False)
+        scaffold.change_field_visibility('name', config.custom_product_name, True)
+        scaffold.change_field_visibility('is_new', config.display_new_field)
+        scaffold.change_field_visibility('is_hot', config.display_hot_field)
+        scaffold.change_field_visibility('brand', config.display_brand_field)
+        scaffold.change_field_visibility('lock_brand', config.display_brand_field)
+        scaffold.change_field_visibility('is_recommend', config.display_recommend_field)
+        scaffold.change_field_visibility('is_on_sell', config.display_on_sell_field)
+        scaffold.change_field_visibility('is_sell_well', config.display_sell_well_field)
+        scaffold.change_field_visibility('is_limit_quantity', config.display_limit_quantity_field)
+        scaffold.change_field_visibility('is_limit_datetime', config.display_limit_time_field)
+        scaffold.change_field_visibility('limit_end_datetime', config.display_limit_time_field)
 
     @staticmethod
     def change_parent_category(*args, **kwargs):
@@ -69,9 +76,8 @@ class Product(Controller):
             category_list.insert(0, category)
             get_category = category.get()
             category = get_category.category
-            if get_category.brand is not None and brand is None:
+            if item.lock_brand is False and get_category.brand is not None and brand is None:
                 brand = get_category.brand
-        c = category_list
         for i in xrange(len(category_list), 6):
             category_list.append(None)
         item.category_1 = category_list[0]
@@ -83,16 +89,3 @@ class Product(Controller):
         if item.brand is None or item.brand == u'':
             item.brand = brand
         item.put()
-
-    @csrf_protect
-    def admin_add(self):
-        self.check_field_config(self.get_config(self.namespace), self.Scaffold)
-        self.events.scaffold_after_save += self.change_parent_category
-        return scaffold.add(self)
-
-    @csrf_protect
-    def admin_edit(self, key):
-        self.check_field_config(self.get_config(self.namespace), self.Scaffold)
-        self.events.scaffold_after_save += self.change_parent_category
-        return scaffold.edit(self, key)
-

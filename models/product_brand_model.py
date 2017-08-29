@@ -24,7 +24,7 @@ class ProductBrandModel(BasicModel):
     title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體品牌名稱')
     title_lang_enus = Fields.StringProperty(verbose_name=u'英文品牌名稱')
 
-    is_enable = Fields.BooleanProperty(default=True, verbose_name=u'啟用')
+    is_enable = Fields.BooleanProperty(verbose_name=u'啟用', default=True)
 
     description_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體中文網頁描述')
     description_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體中文網頁描述')
@@ -61,7 +61,3 @@ class ProductBrandModel(BasicModel):
     @property
     def image(self):
         return self.image_lang_zhtw
-
-    @classmethod
-    def find_by_properties(cls, *args, **kwargs):
-        return cls.find_all_by_properties(**kwargs).get()

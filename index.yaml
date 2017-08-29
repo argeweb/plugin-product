@@ -178,3 +178,9 @@
   - name: is_enable
   - name: sort
     direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: brand
+  - name: sort
+    direction: desc

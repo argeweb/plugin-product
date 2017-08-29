@@ -28,7 +28,15 @@ class ProductModel(BasicModel):
     category_5 = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'類別 5')
     category_6 = Fields.CategoryProperty(kind=ProductCategoryModel, verbose_name=u'類別 6')
     brand = Fields.CategoryProperty(kind=ProductBrandModel, verbose_name=u'品牌')
-    lock_brand = Fields.BooleanProperty(default=False, verbose_name=u'鎖定品牌(不受分類影響)')
+    lock_brand = Fields.BooleanProperty(verbose_name=u'鎖定品牌(不受分類影響)', default=False)
+
+    try:
+        from plugins.supplier.models.supplier_model import SupplierModel
+    except ImportError:
+        class SupplierModel(BasicModel):
+            pass
+    supplier = Fields.CategoryProperty(kind=SupplierModel, verbose_name=u'供應商')
+
     description = Fields.TextProperty(verbose_name=u'描述')
     content = Fields.RichTextProperty(verbose_name=u'詳細說明')
 
@@ -43,19 +51,19 @@ class ProductModel(BasicModel):
     sku_link = Fields.SidePanelProperty(verbose_name=u'庫存管理', text=u'點擊此處開啟 庫存管理', tab_page=1,
                                         auto_open=True, uri='admin:product_stock:stock:side_panel_for_product')
 
-    is_enable = Fields.BooleanProperty(default=True, verbose_name=u'顯示於前台', tab_page=2)
-    can_order = Fields.BooleanProperty(default=False, verbose_name=u'可以進行訂購', tab_page=2)
-    can_pre_order = Fields.BooleanProperty(default=False, verbose_name=u'可以進行預購', tab_page=2)
-    is_recommend = Fields.BooleanProperty(default=False, verbose_name=u'顯示為推薦商品', tab_page=2)
-    is_new = Fields.BooleanProperty(default=False, verbose_name=u'顯示為最新產品', tab_page=2)
-    is_hot = Fields.BooleanProperty(default=False, verbose_name=u'顯示為熱門產品', tab_page=2)
-    is_on_sell = Fields.BooleanProperty(default=False, verbose_name=u'顯示為特價產品', tab_page=2)
-    is_sell_well = Fields.BooleanProperty(default=False, verbose_name=u'顯示為熱銷產品', tab_page=2)
-    is_limit_quantity = Fields.BooleanProperty(default=False, verbose_name=u'顯示為限量產品', tab_page=2)
-    is_limit_datetime = Fields.BooleanProperty(default=False, verbose_name=u'顯示為限時產品', tab_page=2)
+    is_enable = Fields.BooleanProperty(verbose_name=u'顯示於前台', tab_page=2, default=True)
+    can_order = Fields.BooleanProperty(verbose_name=u'可以進行訂購', tab_page=2, default=False)
+    can_pre_order = Fields.BooleanProperty(verbose_name=u'可以進行預購', tab_page=2, default=False)
+    is_recommend = Fields.BooleanProperty(verbose_name=u'顯示為推薦商品', tab_page=2, default=False)
+    is_new = Fields.BooleanProperty(verbose_name=u'顯示為最新產品', tab_page=2, default=False)
+    is_hot = Fields.BooleanProperty(verbose_name=u'顯示為熱門產品', tab_page=2, default=False)
+    is_on_sell = Fields.BooleanProperty(verbose_name=u'顯示為特價產品', tab_page=2, default=False)
+    is_sell_well = Fields.BooleanProperty(verbose_name=u'顯示為熱銷產品', tab_page=2, default=False)
+    is_limit_quantity = Fields.BooleanProperty(verbose_name=u'顯示為限量產品', tab_page=2, default=False)
+    is_limit_datetime = Fields.BooleanProperty(verbose_name=u'顯示為限時產品', tab_page=2, default=False)
     limit_end_datetime = Fields.DateTimeProperty(auto_now=True, verbose_name=u'最後期限', tab_page=2)
 
-    image = Fields.ImageProperty(verbose_name=u'圖片 1', tab_page=3)
+    image = Fields.ImageProperty(verbose_name=u'圖片', tab_page=3)
     image_2 = Fields.ImageProperty(verbose_name=u'圖片 2', tab_page=3)
     image_3 = Fields.ImageProperty(verbose_name=u'圖片 3', tab_page=3)
     image_4 = Fields.ImageProperty(verbose_name=u'圖片 4', tab_page=3)
@@ -73,7 +81,7 @@ class ProductModel(BasicModel):
     def all_enable(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True).order(-cls.sort)
         else:
@@ -86,7 +94,7 @@ class ProductModel(BasicModel):
     def all_new(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_new==True).order(-cls.sort)
         else:
@@ -99,7 +107,7 @@ class ProductModel(BasicModel):
     def all_hot(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_hot==True).order(-cls.sort)
         else:
@@ -112,7 +120,7 @@ class ProductModel(BasicModel):
     def all_recommend(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_recommend==True).order(-cls.sort)
         else:
@@ -125,7 +133,7 @@ class ProductModel(BasicModel):
     def all_on_sell(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_on_sell==True).order(-cls.sort)
         else:
@@ -138,7 +146,7 @@ class ProductModel(BasicModel):
     def all_sell_well(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_sell_well==True).order(-cls.sort)
         else:
@@ -151,7 +159,7 @@ class ProductModel(BasicModel):
     def all_limit_quantity(cls, category=None, *args, **kwargs):
         cat = None
         if category:
-            cat = ProductCategoryModel.find_by_name(category)
+            cat = ProductCategoryModel.get_by_name(category)
         if cat is None:
             return cls.query(cls.is_enable==True, cls.is_limit_quantity==True).order(-cls.sort)
         else:
@@ -159,6 +167,14 @@ class ProductModel(BasicModel):
                 cls.category==cat.key, cls.category_1==cat.key, cls.category_2==cat.key, cls.category_3==cat.key,
                 cls.category_4==cat.key, cls.category_5==cat.key, cls.category_6==cat.key),
                 cls.is_enable==True, cls.is_limit_quantity==True)).order(-cls.sort)
+
+    @classmethod
+    def all_brand_product_list(cls, brand=None, *args, **kwargs):
+        if brand:
+            brand = ProductBrandModel.get_by_name(brand)
+        if brand is None:
+            return []
+        return cls.query(cls.is_enable==True, cls.brand==brand.key).order(-cls.sort)
 
     @property
     def sku_list(self):

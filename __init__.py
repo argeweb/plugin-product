@@ -19,7 +19,9 @@ ViewDatastore.register('recommend_product_list', ProductModel.all_recommend)
 ViewDatastore.register('on_sell_product_list', ProductModel.all_on_sell)
 ViewDatastore.register('sell_well_product_list', ProductModel.all_sell_well)
 ViewDatastore.register('limit_quantity_product_list', ProductModel.all_limit_quantity)
+ViewDatastore.register('brand_product_list', ProductModel.all_brand_product_list)
 ViewDatastore.register('product_brand', ProductBrandModel.find_by_properties)
+ViewDatastore.register('product_brand_list', ProductBrandModel.all_enable)
 ViewDatastore.register('product_category', ProductCategoryModel.find_by_properties)
 ViewDatastore.register('product_category_list', ProductCategoryModel.all_enable)
 
@@ -59,7 +61,7 @@ plugins_helper = {
                 {'action': 'delete', 'name': u'刪除品牌'},
             ]
         },
-        'product_config': {
+        'config': {
             'group': u'產品設定',
             'actions': [
                 {'action': 'config', 'name': u'產品相關設定'},

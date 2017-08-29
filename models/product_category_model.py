@@ -42,12 +42,12 @@ class ProductCategoryModel(BasicModel):
     image_lang_zhcn = Fields.ImageProperty(verbose_name=u'簡體形象圖片')
     image_lang_enus = Fields.ImageProperty(verbose_name=u'英文形象圖片')
 
-    must_update_product = Fields.BooleanProperty(default=False, verbose_name=u'必須更新產品')
-    update_timestamp = Fields.FloatProperty(default=0.0, verbose_name=u'產品更新時間')
-    update_cursor = Fields.StringProperty(default=u'', verbose_name=u'產品更新指針')
-    is_enable = Fields.BooleanProperty(default=True, verbose_name=u'啟用')
+    must_update_product = Fields.BooleanProperty(verbose_name=u'必須更新產品', default=False)
+    update_timestamp = Fields.FloatProperty(verbose_name=u'產品更新時間', default=0.0)
+    update_cursor = Fields.StringProperty(verbose_name=u'產品更新指針', default=u'')
+    is_enable = Fields.BooleanProperty(verbose_name=u'啟用', default=True)
 
-    use_content = Fields.BooleanProperty(default=False, verbose_name=u'顯示品牌詳細介紹banner')
+    use_content = Fields.BooleanProperty(verbose_name=u'顯示品牌詳細介紹banner', default=False)
 
     content_lang_zhtw = Fields.RichTextProperty(verbose_name=u'繁體詳細介紹')
     content_lang_zhcn = Fields.RichTextProperty(verbose_name=u'簡體詳細介紹')
@@ -72,10 +72,6 @@ class ProductCategoryModel(BasicModel):
     @property
     def image(self):
         return self.image_lang_zhtw
-
-    @classmethod
-    def find_by_properties(cls, *args, **kwargs):
-        return cls.find_all_by_properties(**kwargs).get()
 
     @classmethod
     def all_enable(cls, *args, **kwargs):

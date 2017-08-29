@@ -12,25 +12,25 @@ from argeweb.components.csrf import CSRF, csrf_protect
 from argeweb import Controller, scaffold, route_menu, Fields, route_with, route
 from argeweb.components.pagination import Pagination
 from argeweb.components.search import Search
+from ..models.config_model import ConfigModel
 import time
-import random
 
 
 class ProductCategory(Controller):
     class Meta:
         components = (scaffold.Scaffolding, Pagination, Search, CSRF)
-        pagination_limit = 1000
 
     class Scaffold:
-        display_in_list = ('name', 'title', 'is_enable', 'category')
-        hidden_in_form = ('must_update_product', 'update_timestamp', 'update_cursor')
-        excluded_in_form = ()
+        display_in_list = ['name', 'title', 'is_enable', 'category']
+        hidden_in_form = ['must_update_product', 'update_timestamp', 'update_cursor']
 
-    @route_menu(list_name=u'backend', text=u'產品分類', sort=1102, group=u'產品銷售')
+    @route_menu(list_name=u'backend', group=u'產品管理', text=u'產品分類', sort=1102)
     def admin_list(self):
         page_view = self.params.get_header('page_view')
-        from ..models.product_config_model import ProductConfigModel
-        self.context['config'] = ProductConfigModel.find_by_name(self.namespace)
+        config = ConfigModel.get_by_name('product_config')
+        self.context['config'] = config
+        self.scaffold.change_field_visibility('brand', config.display_brand_field)
+        self.scaffold.change_field_visibility('use_content', config.display_brand_field)
         if page_view == u'sort':
             self.meta.view.template_name = '/product_category/admin_sort.html'
             self.context['change_view_to_edit_function'] = 'reload'
@@ -40,17 +40,28 @@ class ProductCategory(Controller):
             self.context['change_view_to_sort_function'] = 'reload'
         return scaffold.list(self)
 
+    def admin_add(self):
+        config = ConfigModel.get_by_name('product_config')
+        self.context['config'] = config
+        self.scaffold.change_field_visibility('brand', config.display_brand_field)
+        self.scaffold.change_field_visibility('use_content', config.display_brand_field)
+        return scaffold.add(self)
+
+    @csrf_protect
+    def admin_edit(self, key):
+        config = ConfigModel.get_by_name('product_config')
+        self.context['config'] = config
+        self.scaffold.change_field_visibility('brand', config.display_brand_field)
+        self.scaffold.change_field_visibility('use_content', config.display_brand_field)
+        self.events.scaffold_after_save += self.set_must_update_product_true
+        return scaffold.edit(self, key)
+
     @staticmethod
     def set_must_update_product_true(*args, **kwargs):
         item = kwargs['item']
         item.must_update_product = True
         item.must_update_timestamp = time.time()
         item.put()
-
-    @csrf_protect
-    def admin_edit(self, key):
-        self.events.scaffold_after_save += self.set_must_update_product_true
-        return scaffold.edit(self, key)
 
     @route
     def admin_change_parent(self):
@@ -150,7 +161,6 @@ class ProductCategory(Controller):
         record.must_update_product = more
         record.put_async()
         ndb.put_multi_async(data)
-
         self.context['data'] = {
             'update': record.name
         }
