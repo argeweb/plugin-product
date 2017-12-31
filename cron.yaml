@@ -1,0 +1,3 @@
+- description: update product
+  url: /cron/product/product_category/update_product
+  schedule: every 15 mins

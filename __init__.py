@@ -10,8 +10,10 @@ from argeweb import ViewDatastore
 from models.product_model import ProductModel
 from models.product_model import ProductCategoryModel
 from models.product_model import ProductBrandModel
+from models.product_specification_model import ProductSpecificationModel
 
 ViewDatastore.register('product', ProductModel.find_by_properties)
+ViewDatastore.register('product_specification_list', ProductSpecificationModel.all_with_product)
 ViewDatastore.register('product_list', ProductModel.all_enable)
 ViewDatastore.register('new_product_list', ProductModel.all_new)
 ViewDatastore.register('hot_product_list', ProductModel.all_hot)
@@ -67,6 +69,5 @@ plugins_helper = {
                 {'action': 'config', 'name': u'產品相關設定'},
             ]
         },
-    },
-    'install_uri': 'product:product_config:after_install'
+    }
 }

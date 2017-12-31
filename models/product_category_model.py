@@ -23,24 +23,17 @@ class ProductCategoryModel(BasicModel):
             'keywords_lang_zhtw': u'關鍵字',
         }
     name = Fields.StringProperty(verbose_name=u'識別名稱')
-    title_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體分類名稱')
-    title_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體分類名稱')
-    title_lang_enus = Fields.StringProperty(verbose_name=u'英文分類名稱')
+    title = Fields.StringProperty(verbose_name=u'分類名稱')
 
-    category = Fields.CategoryProperty(kind=Category, verbose_name=u'父類別')
+    category = Fields.CategoryProperty(kind=Category, verbose_name=u'上層分類')
+    category_name = Fields.SearchingHelperProperty(verbose_name=u'上層分類', target='category', target_field_name='name')
     brand = Fields.CategoryProperty(kind=Brand, verbose_name=u'品牌')
+    image = Fields.ImageProperty(verbose_name=u'分類圖片', default='')
+    icon = Fields.StringProperty(verbose_name=u'ICON', default='')
 
-    description_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體中文網頁描述')
-    description_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體中文網頁描述')
-    description_lang_enus = Fields.StringProperty(verbose_name=u'英文網頁描述')
-
-    keywords_lang_zhtw = Fields.StringProperty(verbose_name=u'繁體中文關鍵字')
-    keywords_lang_zhcn = Fields.StringProperty(verbose_name=u'簡體中文關鍵字')
-    keywords_lang_enus = Fields.StringProperty(verbose_name=u'英文關鍵字')
-
-    image_lang_zhtw = Fields.ImageProperty(verbose_name=u'繁體形象圖片')
-    image_lang_zhcn = Fields.ImageProperty(verbose_name=u'簡體形象圖片')
-    image_lang_enus = Fields.ImageProperty(verbose_name=u'英文形象圖片')
+    description = Fields.StringProperty(verbose_name=u'分類描述')
+    keywords = Fields.StringProperty(verbose_name=u'SEO 關鍵字')
+    content = Fields.RichTextProperty(verbose_name=u'詳細介紹')
 
     must_update_product = Fields.BooleanProperty(verbose_name=u'必須更新產品', default=False)
     update_timestamp = Fields.FloatProperty(verbose_name=u'產品更新時間', default=0.0)
@@ -48,30 +41,6 @@ class ProductCategoryModel(BasicModel):
     is_enable = Fields.BooleanProperty(verbose_name=u'啟用', default=True)
 
     use_content = Fields.BooleanProperty(verbose_name=u'顯示品牌詳細介紹banner', default=False)
-
-    content_lang_zhtw = Fields.RichTextProperty(verbose_name=u'繁體詳細介紹')
-    content_lang_zhcn = Fields.RichTextProperty(verbose_name=u'簡體詳細介紹')
-    content_lang_enus = Fields.RichTextProperty(verbose_name=u'英文詳細介紹')
-
-    @property
-    def title(self):
-        return self.title_lang_zhtw
-
-    @property
-    def content(self):
-        return self.content_lang_zhtw
-
-    @property
-    def description(self):
-        return self.description_lang_zhtw
-
-    @property
-    def keyword(self):
-        return self.keywords_lang_zhtw
-
-    @property
-    def image(self):
-        return self.image_lang_zhtw
 
     @classmethod
     def all_enable(cls, *args, **kwargs):
@@ -97,9 +66,3 @@ class ProductCategoryModel(BasicModel):
     def need_update_record(cls, *args, **kwargs):
         return cls.query(cls.must_update_product == True).order(cls.update_timestamp).get()
 
-    def after_put(self, key):
-        if self.must_update_product is True:
-            from google.appengine.api import taskqueue
-            task = taskqueue.add(
-                url='/taskqueue/product/product_category/update_product',
-                params={})

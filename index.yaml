@@ -162,6 +162,13 @@
 - kind: ProductModel
   properties:
   - name: is_enable
+  - name: is_new
+  - name: sort
+    direction: desc
+
+- kind: ProductModel
+  properties:
+  - name: is_enable
   - name: is_on_sell
   - name: sort
     direction: desc

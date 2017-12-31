@@ -21,13 +21,8 @@ class Config(Controller):
             controller.fire('disable_role_action', action_uri='plugins.product.controllers.product_brand.list')
 
     @route
-    @route_menu(list_name=u'super_user', text=u'產品相關設定', sort=9930, group=u'系統設定', need_hr=True)
+    @route_menu(list_name=u'super_user', text=u'產品相關設定', sort=9930, group=u'銷售相關', need_hr=True)
     def admin_config(self):
-        config_record = self.meta.Model.get_or_create_by_name('product_config')
+        config_record = self.meta.Model.get_config()
         self.events.scaffold_after_save += self.change_config
         return scaffold.edit(self, config_record.key)
-
-    @route
-    def taskqueue_after_install(self):
-        config_record = self.meta.Model.get_or_create_by_name('product_config')
-        return 'done'
